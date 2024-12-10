@@ -2,7 +2,7 @@ import os
 from openai import OpenAI
 
 def use_grok(system,user):
-    XAI_API_KEY = os.getenv("XAI_API_KEY","xai-SsjTNF2zhTdoDM3jwdPHc62NHD6WQBzIjCMkS8oDl8Ec8hLVjAN2GlOWxX5FzVGRnrPrF1VVFEHf6MDO")
+    XAI_API_KEY = os.getenv("XAI_API_KEY")
     client = OpenAI(
         api_key=XAI_API_KEY,
         base_url="https://api.x.ai/v1",
