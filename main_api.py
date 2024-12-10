@@ -10,7 +10,7 @@ audio_file4 = "audio_files\Call-Center-Sample-Recordings--Magellan-Solutions (4)
 app = FastAPI(title="Voice Compliance Agent")
 
 
-@app.post("/speech-to-text/")
+@app.post("/transcribe-audio/")
 async def transcribe_audio(audio_file: UploadFile = File(...)) -> dict:
 
     try:
@@ -18,16 +18,25 @@ async def transcribe_audio(audio_file: UploadFile = File(...)) -> dict:
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
         with open(save_path, "wb") as buffer:
             shutil.copyfileobj(audio_file.file, buffer)
-        
-        
-        
-        
+
         text = speech_to_text(save_path)
         if text:
             print("Call transcript: ",text)
             verdict = check_compliance(text)
             print("consumer clearly articulated their understanding of product and process: ",verdict)
-        return {"text": text, "verdict": verdict}
+        return {"text": text}
+        
+    except (json.JSONDecodeError, IndexError, KeyError, ValueError) as e:
+        print(f"Error processing emotion: {e}")
+        return {"error": str(e)}
+
+
+@app.post("/analyze-text/")
+async def analyze_text(transcribed_test: str) -> dict:
+    try:
+        verdict = check_compliance(text)
+        print("consumer clearly articulated their understanding of product and process: ",verdict)
+        return {"verdict": verdict}
         
     except (json.JSONDecodeError, IndexError, KeyError, ValueError) as e:
         print(f"Error processing emotion: {e}")
