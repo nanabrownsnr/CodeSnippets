@@ -9,7 +9,6 @@ audio_file4 = "audio_files\Call-Center-Sample-Recordings--Magellan-Solutions (4)
 
 app = FastAPI(title="Voice Compliance Agent")
 
-
 @app.post("/transcribe-audio/")
 async def transcribe_audio(audio_file: UploadFile = File(...)) -> dict:
 
@@ -34,7 +33,7 @@ async def transcribe_audio(audio_file: UploadFile = File(...)) -> dict:
 @app.post("/analyze-text/")
 async def analyze_text(transcribed_test: str) -> dict:
     try:
-        verdict = check_compliance(text)
+        verdict = check_compliance(transcribed_test)
         print("consumer clearly articulated their understanding of product and process: ",verdict)
         return {"verdict": verdict}
         
